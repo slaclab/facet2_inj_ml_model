@@ -1,0 +1,3 @@
+include facet2_model/resources/*.yaml
+include facet2_model/resources/*.pt
+include README.md

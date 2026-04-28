@@ -1,0 +1,32 @@
+model_class: TorchModel
+input_variables:
+  QUAD:IN10:121:BACT: {variable_class: TorchScalarVariable, read_only: false, default_validation_config: none,
+    default_value: 0.03196033090353012}
+  KLYS:LI10:21:AMPL: {variable_class: TorchScalarVariable, read_only: false, default_validation_config: none,
+    default_value: 40.167457580566406}
+  KLYS:LI10:21:PHAS: {variable_class: TorchScalarVariable, read_only: false, default_validation_config: none,
+    default_value: 74.87874603271484}
+  SOLN:IN10:121:BACT: {variable_class: TorchScalarVariable, read_only: false, default_validation_config: none,
+    default_value: 0.4160895347595215}
+  QUAD:IN10:122:BACT: {variable_class: TorchScalarVariable, read_only: false, default_validation_config: none,
+    default_value: 0.0315588042140007}
+  distgen:t_dist:sigma_t:value: {variable_class: TorchScalarVariable, read_only: false,
+    default_validation_config: none, default_value: 0.43811073899269104}
+  TORO:IN10:591:TMIT_PC: {variable_class: TorchScalarVariable, read_only: false, default_validation_config: none,
+    default_value: 954.0297241210938}
+output_variables:
+  covariance_matrix:
+    variable_class: TorchNDVariable
+    read_only: false
+    default_validation_config: none
+    shape: [6, 6]
+    dtype: torch.float32
+input_validation_config: null
+output_validation_config: null
+model: injector_machine_model.pt
+input_transformers: [injector_machine_input_transformers_0.pt, injector_machine_input_transformers_1.pt]
+output_transformers: []
+output_format: tensor
+device: cpu
+fixed_model: true
+precision: single

@@ -21,9 +21,6 @@ dev = [
     "black",
 ]
 
-[tool.setuptools]
-py-modules = ["train"]
-
 [tool.setuptools.packages.find]
 include = ["facet2_inj_ml_model*"]
 

@@ -55,12 +55,11 @@ After doing pip install of this repository
 
 ## Training Modules
 
-There are two similarly named modules in this repository with different purposes:
+The actual training implementation lives in `facet2_inj_ml_model/training.py`.
 
-- `facet2_inj_ml_model/training.py` is the actual training implementation.
-- `train.py` at the repository root is a compatibility shim for serialized PyTorch artifacts that still reference `train.CovarianceSurrogateModel`.
+For compatibility with serialized PyTorch artifacts that still reference `train.CovarianceSurrogateModel`, the package registers a `train` compatibility alias from `facet2_inj_ml_model/__init__.py`. This keeps the compatibility surface inside the package instead of shipping a separate repository-root `train.py` file.
 
-The root `train.py` should not be treated as the main training script. It only re-exports symbols from `facet2_inj_ml_model.training` so legacy `torch.load` resolution continues to work.
+That alias is created when `facet2_inj_ml_model` is imported, which matches the normal packaged usage pattern of importing the package before loading the model.
 
 ## Retraining
 

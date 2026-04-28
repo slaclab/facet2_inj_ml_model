@@ -1,10 +1,12 @@
-# FACET II Model
+# FACET II Injector ML Model
 
 This repository contains the model files corresponding to the FACET II NN surrogate model. 
 
+It includes both inference assets and the packaged training implementation used to retrain the covariance model.
+
 ## Model Description
 
-The model was trained on IMPACT-T simulation data to predict beam properties at 241 using injector PVs for LCLS. 
+The model was trained on IMPACT-T simulation data to predict beam properties at 241 using PVs for FACET. 
 
 These are the input scalar PVs upstream of 241. 
 Feature columns:
@@ -46,8 +48,38 @@ The loss is then applied in normalized covariance space so each covariance eleme
 ## Usage 
 After doing pip install of this repository
 ```
->>> from facet2_model import load_model
+>>> from from facet2_inj_ml_model import load_model
 >>> model = load_model()
 >>> print(model.evaluate({"SOLN:IN10:121:BACT": 0.43}))
 ```
+
+## Training Modules
+
+There are two similarly named modules in this repository with different purposes:
+
+- `facet2_inj_ml_model/training.py` is the actual training implementation.
+- `train.py` at the repository root is a compatibility shim for serialized PyTorch artifacts that still reference `train.CovarianceSurrogateModel`.
+
+The root `train.py` should not be treated as the main training script. It only re-exports symbols from `facet2_inj_ml_model.training` so legacy `torch.load` resolution continues to work.
+
+## Retraining
+
+Retraining can be run from this repository if you already have prepared CSV splits. The training entrypoint is `facet2_inj_ml_model.training`.
+
+Example:
+
+```bash
+python -m facet2_inj_ml_model.training \
+	--train-csv path/to/dataset-train.csv \
+	--val-csv path/to/dataset-val.csv \
+	--test-csv path/to/dataset-test.csv
+```
+
+Expected data requirements:
+
+- The input features are the seven PV columns listed above.
+- The targets are 21 lower-triangular Cholesky columns named `cov_chol_0` through `cov_chol_20`.
+- The repository does not include dataset generation or preprocessing code for producing these CSV files from raw simulation data.
+
+If your previous training workflow created those CSVs in a separate repository, that preprocessing step is still required before retraining here.
 

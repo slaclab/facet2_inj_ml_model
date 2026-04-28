@@ -3,14 +3,16 @@ requires = ["setuptools>=61.0", "wheel"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "facet2-model"
+name = "facet2_inj_ml_model"
 version = "0.1.0"
-description = "FACET PyTorch model package"
+description = "PyTorch model and LUME-Torch wrapper for FACET-II injector surrogate"
 readme = "README.MD"
-requires-python = ">=3.8"
+requires-python = ">=3.11"
 dependencies = [
-    "lume-torch @ git+https://github.com/lume-science/lume-torch", 
-    "pyyaml",
+    "lume-torch @ git+https://github.com/lume-science/lume-torch",
+    "numpy",
+    "pandas",
+    "torch",
 ]
 
 [project.optional-dependencies]
@@ -23,7 +25,7 @@ dev = [
 py-modules = ["train"]
 
 [tool.setuptools.packages.find]
-include = ["facet2_model*"]
+include = ["facet2_inj_ml_model*"]
 
 [tool.setuptools.package-data]
-facet2_model = ["resources/*"]
+facet2_inj_ml_model = ["resources/*"]

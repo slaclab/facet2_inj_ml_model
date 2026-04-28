@@ -1,5 +1,5 @@
 """Train the covariance prediction MLP on the prepared dataset splits."""
-# .venv/bin/python train.py
+
 
 import argparse
 import time
@@ -82,7 +82,7 @@ class CovarianceSurrogateModel(nn.Module):
         tril_idx = torch.tril_indices(row=6, col=6, offset=0, device=chol_raw.device)
         L[:, tril_idx[0], tril_idx[1]] = chol_raw
         cov = L @ L.transpose(1, 2)
-        
+
         return cov
 
     def chol_norm_to_cov(self, chol_norm: torch.Tensor) -> torch.Tensor:

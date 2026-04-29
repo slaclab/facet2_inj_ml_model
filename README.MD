@@ -8,18 +8,43 @@ It includes both inference assets and the packaged training implementation used 
 
 The model was trained on IMPACT-T simulation data to predict beam properties at 241 using PVs for FACET. 
 
-These are the input scalar PVs upstream of 241. 
-Feature columns:
+The packaged inference model consumes 7 scalar inputs and predicts a full 6x6 beam covariance matrix. During training, the targets are the 21 lower-triangular Cholesky factors (`cov_chol_0`..`cov_chol_20`); the network reconstructs `C = L @ L^T` internally. Loss is computed in per-element normalized covariance space.
 
-- CQ10121:b1_gradient
-- GUNF:rf_field_scale
-- GUNF:theta0_deg
-- SOL10111:solenoid_field_scale
-- SQ10122:b1_gradient
-- distgen:t_dist:sigma_t:value
-- distgen:total_charge:value
+## LUME-Torch Interface
 
-The model consumes the 7 simulator-space inputs above and outputs a full 6x6 covariance matrix. Targets are the 21 lower-triangular Cholesky factors (cov_chol_0..20); the network reconstructs C = L @ L^T internally. Loss is computed in per-element normalized covariance space.
+`load_model()` returns a `lume_torch.models.TorchModel` configured by `facet2_inj_ml_model/resources/model_config.yaml`.
+
+The runtime input variables expected by that `TorchModel` instance are:
+
+- `QUAD:IN10:121:BACT`
+- `KLYS:LI10:21:AMPL`
+- `KLYS:LI10:21:PHAS`
+- `SOLN:IN10:121:BACT`
+- `QUAD:IN10:122:BACT`
+- `distgen:t_dist:sigma_t:value`
+- `TORO:IN10:591:TMIT_PC`
+
+The model exposes one output variable:
+
+- `covariance_matrix`: a `torch.float32` tensor with shape `[6, 6]`
+
+These runtime keys are the public inference contract for the packaged model.
+
+## Training Column Mapping
+
+The training code expects simulator-space feature columns rather than the runtime LUME-Torch PV keys above.
+
+| Training column | Runtime key |
+| --- | --- |
+| `CQ10121:b1_gradient` | `QUAD:IN10:121:BACT` |
+| `GUNF:rf_field_scale` | `KLYS:LI10:21:AMPL` |
+| `GUNF:theta0_deg` | `KLYS:LI10:21:PHAS` |
+| `SOL10111:solenoid_field_scale` | `SOLN:IN10:121:BACT` |
+| `SQ10122:b1_gradient` | `QUAD:IN10:122:BACT` |
+| `distgen:t_dist:sigma_t:value` | `distgen:t_dist:sigma_t:value` |
+| `distgen:total_charge:value` | `TORO:IN10:591:TMIT_PC` |
+
+Training targets are `cov_chol_0` through `cov_chol_20`, which represent the flattened lower-triangular Cholesky factors of the predicted covariance matrix.
 
 ## Model architecture
 7 inputs -> 21 Cholesky outputs -> 6x6 covariance output:
@@ -48,10 +73,21 @@ The loss is then applied in normalized covariance space so each covariance eleme
 ## Usage 
 After doing pip install of this repository
 ```
->>> from from facet2_inj_ml_model import load_model
+>>> from facet2_inj_ml_model import load_model
 >>> model = load_model()
->>> print(model.evaluate({"SOLN:IN10:121:BACT": 0.43}))
+>>> result = model.evaluate({
+...     "QUAD:IN10:121:BACT": 0.03196033090353012,
+...     "KLYS:LI10:21:AMPL": 40.167457580566406,
+...     "KLYS:LI10:21:PHAS": 74.87874603271484,
+...     "SOLN:IN10:121:BACT": 0.43,
+...     "QUAD:IN10:122:BACT": 0.0315588042140007,
+...     "distgen:t_dist:sigma_t:value": 0.43811073899269104,
+...     "TORO:IN10:591:TMIT_PC": 954.0297241210938,
+... })
+>>> print(result)
 ```
+
+All seven input keys must be supplied when evaluating the model unless your calling code fills missing values from the `TorchModel` defaults.
 
 ## Training Modules
 
@@ -76,7 +112,7 @@ python -m facet2_inj_ml_model.training \
 
 Expected data requirements:
 
-- The input features are the seven PV columns listed above.
+- The input features are the seven simulator/training columns listed in the table above.
 - The targets are 21 lower-triangular Cholesky columns named `cov_chol_0` through `cov_chol_20`.
 - The repository does not include dataset generation or preprocessing code for producing these CSV files from raw simulation data.
 

@@ -28,8 +28,6 @@ The model exposes one output variable:
 
 - `covariance_matrix`: a `torch.float32` tensor with shape `[6, 6]`
 
-These runtime keys are the public inference contract for the packaged model.
-
 ## Training Column Mapping
 
 The training code expects simulator-space feature columns rather than the runtime LUME-Torch PV keys above.
@@ -86,8 +84,6 @@ After doing pip install of this repository
 ... })
 >>> print(result)
 ```
-
-All seven input keys must be supplied when evaluating the model unless your calling code fills missing values from the `TorchModel` defaults.
 
 ## Training Modules
 

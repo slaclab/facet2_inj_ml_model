@@ -1,19 +1,19 @@
 model_class: TorchModel
 input_variables:
   QUAD:IN10:121:BACT: {variable_class: TorchScalarVariable, read_only: false, default_validation_config: none,
-    default_value: 0.03196033090353012}
+    default_value: 0.03189068287611008}
   KLYS:LI10:21:AMPL: {variable_class: TorchScalarVariable, read_only: false, default_validation_config: none,
-    default_value: 40.167457580566406}
+    default_value: 40.16770553588867}
   KLYS:LI10:21:PHAS: {variable_class: TorchScalarVariable, read_only: false, default_validation_config: none,
-    default_value: 74.87874603271484}
+    default_value: 74.85069274902344}
   SOLN:IN10:121:BACT: {variable_class: TorchScalarVariable, read_only: false, default_validation_config: none,
-    default_value: 0.4160895347595215}
+    default_value: 0.41603121161460876}
   QUAD:IN10:122:BACT: {variable_class: TorchScalarVariable, read_only: false, default_validation_config: none,
-    default_value: 0.0315588042140007}
+    default_value: 0.031679894775152206}
   distgen:t_dist:sigma_t:value: {variable_class: TorchScalarVariable, read_only: false,
-    default_validation_config: none, default_value: 0.43811073899269104}
+    default_validation_config: none, default_value: 0.4377346336841583}
   TORO:IN10:591:TMIT_PC: {variable_class: TorchScalarVariable, read_only: false, default_validation_config: none,
-    default_value: 954.0297241210938}
+    default_value: 953.813720703125}
 output_variables:
   covariance_matrix:
     variable_class: TorchNDVariable

@@ -1,14 +1,14 @@
 model_class: TorchModel
 input_variables:
-  QUAD:IN10:121:BACT: {variable_class: TorchScalarVariable, read_only: false, default_validation_config: none,
+  QUAD:IN10:121:BCTRL: {variable_class: TorchScalarVariable, read_only: false, default_validation_config: none,
     default_value: 0.03189068287611008}
   KLYS:LI10:21:AMPL: {variable_class: TorchScalarVariable, read_only: false, default_validation_config: none,
     default_value: 40.16770553588867}
   KLYS:LI10:21:PHAS: {variable_class: TorchScalarVariable, read_only: false, default_validation_config: none,
     default_value: 74.85069274902344}
-  SOLN:IN10:121:BACT: {variable_class: TorchScalarVariable, read_only: false, default_validation_config: none,
+  SOLN:IN10:121:BCTRL: {variable_class: TorchScalarVariable, read_only: false, default_validation_config: none,
     default_value: 0.41603121161460876}
-  QUAD:IN10:122:BACT: {variable_class: TorchScalarVariable, read_only: false, default_validation_config: none,
+  QUAD:IN10:122:BCTRL: {variable_class: TorchScalarVariable, read_only: false, default_validation_config: none,
     default_value: 0.031679894775152206}
   distgen:t_dist:sigma_t:value: {variable_class: TorchScalarVariable, read_only: false,
     default_validation_config: none, default_value: 0.4377346336841583}

@@ -73,15 +73,7 @@ After doing pip install of this repository
 ```
 >>> from facet2_inj_ml_model import load_model
 >>> model = load_model()
->>> result = model.evaluate({
-...     "QUAD:IN10:121:BACT": 0.03196033090353012,
-...     "KLYS:LI10:21:AMPL": 40.167457580566406,
-...     "KLYS:LI10:21:PHAS": 74.87874603271484,
-...     "SOLN:IN10:121:BACT": 0.43,
-...     "QUAD:IN10:122:BACT": 0.0315588042140007,
-...     "distgen:t_dist:sigma_t:value": 0.43811073899269104,
-...     "TORO:IN10:591:TMIT_PC": 954.0297241210938,
-... })
+>>> result = model.evaluate({"QUAD:IN10:121:BACT": 0.03196033090353012, "KLYS:LI10:21:AMPL": 40.167457580566406, "KLYS:LI10:21:PHAS": 74.87874603271484, "SOLN:IN10:121:BACT": 0.43, "QUAD:IN10:122:BACT": 0.0315588042140007, "distgen:t_dist:sigma_t:value": 0.43811073899269104, "TORO:IN10:591:TMIT_PC": 954.0297241210938 })
 >>> print(result)
 ```
 

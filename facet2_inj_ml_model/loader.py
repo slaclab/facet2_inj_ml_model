@@ -16,13 +16,9 @@ def get_resource_path(filename):
     return str(resource_path)
 
 
-def load_model(use_cpu=False):
+def load_model():
     """
     Load the FACET TorchModel.
-    
-    Args:
-        use_cpu (bool): If True, loads the CPU version of the model.
-                       Default is False (uses GPU version).
     
     Returns:
         TorchModel: Loaded model instance ready for inference.
@@ -30,8 +26,7 @@ def load_model(use_cpu=False):
     Example:
         >>> from facet2_model import load_model
         >>> model = load_model()
-        >>> # or for CPU
-        >>> model = load_model(use_cpu=True)
+
     """
     config_path = get_resource_path("model_config.yaml")
     

@@ -1,0 +1,32 @@
+model_class: TorchModel
+input_variables:
+  CQ10121:b1_gradient: {variable_class: TorchScalarVariable, read_only: false, default_validation_config: none,
+    default_value: -0.015186039730906487}
+  GUNF:rf_field_scale: {variable_class: TorchScalarVariable, read_only: false, default_validation_config: none,
+    default_value: 50856084.0}
+  GUNF:theta0_deg: {variable_class: TorchScalarVariable, read_only: false, default_validation_config: none,
+    default_value: -77.44931030273438}
+  SOL10111:solenoid_field_scale: {variable_class: TorchScalarVariable, read_only: false,
+    default_validation_config: none, default_value: 0.2600195109844208}
+  SQ10122:b1_gradient: {variable_class: TorchScalarVariable, read_only: false, default_validation_config: none,
+    default_value: -0.015085664577782154}
+  distgen:t_dist:sigma_t:value: {variable_class: TorchScalarVariable, read_only: false,
+    default_validation_config: none, default_value: 0.4377346336841583}
+  distgen:total_charge:value: {variable_class: TorchScalarVariable, read_only: false,
+    default_validation_config: none, default_value: 953.813720703125}
+output_variables:
+  covariance_matrix:
+    variable_class: TorchNDVariable
+    read_only: false
+    default_validation_config: none
+    shape: [6, 6]
+    dtype: torch.float32
+input_validation_config: null
+output_validation_config: null
+model: injector_simulator_model.pt
+input_transformers: [injector_simulator_input_transformers_0.pt]
+output_transformers: []
+output_format: tensor
+device: cpu
+fixed_model: true
+precision: single

@@ -12,33 +12,60 @@ The packaged inference model consumes 7 scalar inputs and predicts a full 6x6 be
 
 ## LUME-Torch Interface
 
-`load_model()` returns a `lume_torch.models.TorchModel` configured by `facet2_inj_ml_model/resources/model_config.yaml`.
+`load_model()` returns a `lume_torch.models.TorchModel` configured for either machine-PV or simulator-parameter inputs.
 
-The runtime input variables expected by that `TorchModel` instance are:
+```python
+from facet2_inj_ml_model import load_model
 
-- `QUAD:IN10:121:BACT`
+model = load_model()           # default: machine-PV inputs
+model_sim = load_model("sim")  # simulator-parameter inputs
+```
+
+### Machine-input model (default)
+
+`load_model()` or `load_model("machine")` loads the model from `facet2_inj_ml_model/resources/lumetorchyaml-machine/`. It applies a PV-to-simulator affine transform followed by normalization.
+
+The runtime input variables are:
+
+- `QUAD:IN10:121:BCTRL`
 - `KLYS:LI10:21:AMPL`
 - `KLYS:LI10:21:PHAS`
-- `SOLN:IN10:121:BACT`
-- `QUAD:IN10:122:BACT`
+- `SOLN:IN10:121:BCTRL`
+- `QUAD:IN10:122:BCTRL`
 - `distgen:t_dist:sigma_t:value`
 - `TORO:IN10:591:TMIT_PC`
 
-The model exposes one output variable:
+### Simulator-input model
+
+`load_model("sim")` loads the model from `facet2_inj_ml_model/resources/lumetorchyaml-sim/`. It applies normalization only (no PV mapping).
+
+The runtime input variables are:
+
+- `CQ10121:b1_gradient`
+- `GUNF:rf_field_scale`
+- `GUNF:theta0_deg`
+- `SOL10111:solenoid_field_scale`
+- `SQ10122:b1_gradient`
+- `distgen:t_dist:sigma_t:value`
+- `distgen:total_charge:value`
+
+### Output
+
+Both models expose one output variable:
 
 - `covariance_matrix`: a `torch.float32` tensor with shape `[6, 6]`
 
 ## Training Column Mapping
 
-The training code expects simulator-space feature columns rather than the runtime LUME-Torch PV keys above.
+The training code expects simulator-space feature columns. The machine-input model maps these automatically via an affine PV-to-sim transform.
 
-| Training column | Runtime key |
+| Training column | Machine-input PV key |
 | --- | --- |
-| `CQ10121:b1_gradient` | `QUAD:IN10:121:BACT` |
+| `CQ10121:b1_gradient` | `QUAD:IN10:121:BCTRL` |
 | `GUNF:rf_field_scale` | `KLYS:LI10:21:AMPL` |
 | `GUNF:theta0_deg` | `KLYS:LI10:21:PHAS` |
-| `SOL10111:solenoid_field_scale` | `SOLN:IN10:121:BACT` |
-| `SQ10122:b1_gradient` | `QUAD:IN10:122:BACT` |
+| `SOL10111:solenoid_field_scale` | `SOLN:IN10:121:BCTRL` |
+| `SQ10122:b1_gradient` | `QUAD:IN10:122:BCTRL` |
 | `distgen:t_dist:sigma_t:value` | `distgen:t_dist:sigma_t:value` |
 | `distgen:total_charge:value` | `TORO:IN10:591:TMIT_PC` |
 
@@ -69,11 +96,21 @@ Before training, the code computes:
 The loss is then applied in normalized covariance space so each covariance element contributes on a comparable scale.
 
 ## Usage 
-After doing pip install of this repository
-```
+After doing pip install of this repository:
+
+### Machine-input model (default)
+```python
 >>> from facet2_inj_ml_model import load_model
 >>> model = load_model()
->>> result = model.evaluate({"QUAD:IN10:121:BACT": 0.03196033090353012, "KLYS:LI10:21:AMPL": 40.167457580566406, "KLYS:LI10:21:PHAS": 74.87874603271484, "SOLN:IN10:121:BACT": 0.43, "QUAD:IN10:122:BACT": 0.0315588042140007, "distgen:t_dist:sigma_t:value": 0.43811073899269104, "TORO:IN10:591:TMIT_PC": 954.0297241210938 })
+>>> result = model.evaluate({"QUAD:IN10:121:BCTRL": 0.03196033090353012, "KLYS:LI10:21:AMPL": 40.167457580566406, "KLYS:LI10:21:PHAS": 74.87874603271484, "SOLN:IN10:121:BCTRL": 0.43, "QUAD:IN10:122:BCTRL": 0.0315588042140007, "distgen:t_dist:sigma_t:value": 0.43811073899269104, "TORO:IN10:591:TMIT_PC": 954.0297241210938})
+>>> print(result)
+```
+
+### Simulator-input model
+```python
+>>> from facet2_inj_ml_model import load_model
+>>> model = load_model("sim")
+>>> result = model.evaluate({"CQ10121:b1_gradient": -0.01522, "GUNF:rf_field_scale": 50855680.0, "GUNF:theta0_deg": -77.421, "SOL10111:solenoid_field_scale": 0.26875, "SQ10122:b1_gradient": -0.01503, "distgen:t_dist:sigma_t:value": 0.43811, "distgen:total_charge:value": 954.03})
 >>> print(result)
 ```
 

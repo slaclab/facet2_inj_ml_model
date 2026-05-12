@@ -25,7 +25,7 @@ input_validation_config: null
 output_validation_config: null
 model: injector_machine_model.pt
 input_transformers: [injector_machine_input_transformers_0.pt, injector_machine_input_transformers_1.pt]
-output_transformers: []
+output_transformers: [injector_machine_output_transformers_0.pt]
 output_format: tensor
 device: cpu
 fixed_model: true

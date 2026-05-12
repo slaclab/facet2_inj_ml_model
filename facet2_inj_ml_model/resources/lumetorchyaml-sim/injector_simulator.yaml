@@ -1,19 +1,19 @@
 model_class: TorchModel
 input_variables:
   CQ10121:b1_gradient: {variable_class: TorchScalarVariable, read_only: false, default_validation_config: none,
-    default_value: -0.015186039730906487}
+    default_value: -0.015219205990433693}
   GUNF:rf_field_scale: {variable_class: TorchScalarVariable, read_only: false, default_validation_config: none,
-    default_value: 50856084.0}
+    default_value: 50855768.0}
   GUNF:theta0_deg: {variable_class: TorchScalarVariable, read_only: false, default_validation_config: none,
-    default_value: -77.44931030273438}
+    default_value: -77.42125701904297}
   SOL10111:solenoid_field_scale: {variable_class: TorchScalarVariable, read_only: false,
-    default_validation_config: none, default_value: 0.2600195109844208}
+    default_validation_config: none, default_value: 0.2600559592247009}
   SQ10122:b1_gradient: {variable_class: TorchScalarVariable, read_only: false, default_validation_config: none,
-    default_value: -0.015085664577782154}
+    default_value: -0.015028002671897411}
   distgen:t_dist:sigma_t:value: {variable_class: TorchScalarVariable, read_only: false,
-    default_validation_config: none, default_value: 0.4377346336841583}
+    default_validation_config: none, default_value: 0.43811073899269104}
   distgen:total_charge:value: {variable_class: TorchScalarVariable, read_only: false,
-    default_validation_config: none, default_value: 953.813720703125}
+    default_validation_config: none, default_value: 954.0297241210938}
 output_variables:
   covariance_matrix:
     variable_class: TorchNDVariable

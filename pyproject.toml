@@ -25,4 +25,4 @@ dev = [
 include = ["facet2_inj_ml_model*"]
 
 [tool.setuptools.package-data]
-facet2_inj_ml_model = ["resources/*"]
+facet2_inj_ml_model = ["resources/**/*"]

@@ -1,3 +1,2 @@
-include facet2_inj_ml_model/resources/*.yaml
-include facet2_inj_ml_model/resources/*.pt
+recursive-include facet2_inj_ml_model/resources *.yaml *.pt
 include README.MD

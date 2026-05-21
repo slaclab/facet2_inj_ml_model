@@ -16,9 +16,18 @@ dependencies = [
 ]
 
 [project.optional-dependencies]
+test = [
+    "pytest",
+    "openPMD-beamphysics",
+    "botorch",
+    "scipy",
+]
 dev = [
     "pytest",
     "black",
+    "openPMD-beamphysics",
+    "botorch",
+    "scipy",
 ]
 
 [tool.setuptools.packages.find]
